@@ -3,6 +3,10 @@ import requests
 import time
 import threading
 from datetime import datetime
+from zoneinfo import ZoneInfo
+
+def get_china_time():
+    return datetime.now(ZoneInfo("Asia/Shanghai"))
 
 DISCORD_WEBHOOK_URL = os.getenv ( "DISCORD_WEBHOOK_URL")
 
@@ -51,23 +55,23 @@ def fetch_kr_product (  ) :
                 timestamp = datetime.now (  ) .strftime ( '%Y-%m-%d %H:%M:%S')
                 current_data, changes, rows = {}, [], []
 
-                print ( f"\n==== [KR接口] {timestamp} ====")
+               # print ( f"\n==== [KR接口] {timestamp} ====")
                 for item in option_list:
                     name = item.get ( 'optionNameValue1', '')
                     qty = item.get ( 'salesQuantity', 0)
                     current_data[name] = qty
                     row = f"{name} - {qty}"
                     rows.append ( row)
-                    print ( row)
+                    #print ( row)
                     if name in last_data:
                         diff = qty - last_data[name]
                         if diff != 0:
                             changes.append (  ( name, diff ) )
 
                 if changes:
-                    print ( "变化检测到：")
+                   # print ( "变化检测到：")
                     for name, diff in changes:
-                        print ( f"  {name}: {diff:+d}")
+                       # print ( f"  {name}: {diff:+d}")
                     change_text = "\n".join ( f"{n}: {d:+d}" for n, d in changes)
                     current_text = "\n".join ( rows)
                     msg = (
@@ -75,7 +79,7 @@ def fetch_kr_product (  ) :
                     )
                     send_to_discord ( msg)
 
-                print ( "=================")
+               # print ( "=================")
                 write_log ( log_file, timestamp, rows, changes)
                 last_data = current_data
             else:
@@ -109,14 +113,14 @@ def fetch_tw_product (  ) :
                 timestamp = datetime.now (  ) .strftime ( '%Y-%m-%d %H:%M:%S')
                 current_data, changes, rows = {}, [], []
 
-                print ( f"\n==== [TW接口] {timestamp} ====")
+                #print ( f"\n==== [TW接口] {timestamp} ====")
                 for item in option_list:
                     name = item.get ( 'option1', '')
                     qty = item.get ( 'inventory_quantity', 0)
                     current_data[name] = qty
                     row = f"{name} - {qty}"
                     rows.append ( row)
-                    print ( row)
+                    #print ( row)
                     if name in last_data:
                         diff = qty - last_data[name]
                         if diff != 0:
@@ -125,7 +129,7 @@ def fetch_tw_product (  ) :
                 if changes:
                     print ( "变化检测到：")
                     for name, diff in changes:
-                        print ( f"  {name}: {diff:+d}")
+                        #print ( f"  {name}: {diff:+d}")
                     change_text = "\n".join ( f"{n}: {d:+d}" for n, d in changes)
                     current_text = "\n".join ( rows)
                     msg = (
@@ -143,11 +147,10 @@ def fetch_tw_product (  ) :
         time.sleep ( 5)
 
 if __name__ == "__main__":
-    t1 = threading.Thread ( target=fetch_kr_product, daemon=True)
-    t2 = threading.Thread ( target=fetch_tw_product, daemon=True)
-    t1.start ( )
-    t2.start ( )
-    time.sleep(9)  # 等待两线程跑 9 秒
-    print("运行 9 秒结束，退出程序")
-    #while True:
-        #time.sleep ( 1 ) 
+    t1 = threading.Thread(target=fetch_kr_product, daemon=True)
+    t2 = threading.Thread(target=fetch_tw_product, daemon=True)
+    t1.start()
+    t2.start()
+    
+    time.sleep(30 * 60)  
+    print("运行 30 分钟结束，程序退出")
