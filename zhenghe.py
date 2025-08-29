@@ -152,5 +152,5 @@ if __name__ == "__main__":
     t1.start()
     t2.start()
     
-    time.sleep(60*60)  
+    time.sleep(30*60)  
     print("运行 30 分钟结束，程序退出")
