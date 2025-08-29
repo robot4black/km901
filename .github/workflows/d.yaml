@@ -1,7 +1,7 @@
 name: d
 
 on:
-  workflow_dispatch:   
+  workflow_dispatch:
 
 jobs:
   fetch_and_notify:
@@ -20,17 +20,19 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run ko.py
+      - name: Run zhenghe.py
         env:
-          EVENT_ID: ${{ secrets.EVENT_ID }}
-          BASE_URL: ${{ secrets.BASE_URL }}
-          REFERER_BASE: ${{ secrets.REFERER_BASE }}
-        run: python ko.py
-        
-      - name: Send to Discord
-        run: python send_to_dis.py
-        env:
+          KR_URL: ${{ secrets.KR_URL }}
+          KR_REFERER: ${{ secrets.KR_REFERER }}
+          TW_URL: ${{ secrets.TW_URL }}
+          TW_REFERER: ${{ secrets.TW_REFERER }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: python zhenghe.py
+
+      - name: Send to Discord (if separate)
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL2 }}
+        run: python send_to_dis.py
 
       - name: Trigger Workflow D via GitHub API
         env:
