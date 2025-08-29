@@ -70,7 +70,7 @@ def fetch_kr_product (  ) :
 
                 if changes:
                    # print ( "变化检测到：")
-                    for name, diff in changes:
+                    #for name, diff in changes:
                        # print ( f"  {name}: {diff:+d}")
                     change_text = "\n".join ( f"{n}: {d:+d}" for n, d in changes)
                     current_text = "\n".join ( rows)
@@ -128,7 +128,7 @@ def fetch_tw_product (  ) :
 
                 if changes:
                     print ( "变化检测到：")
-                    for name, diff in changes:
+                    #for name, diff in changes:
                         #print ( f"  {name}: {diff:+d}")
                     change_text = "\n".join ( f"{n}: {d:+d}" for n, d in changes)
                     current_text = "\n".join ( rows)
