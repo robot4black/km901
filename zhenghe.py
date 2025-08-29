@@ -39,7 +39,7 @@ def fetch_kr_product (  ) :
         "pragma": "no-cache",
         "referer": referer,
     }
-    log_file = "kr.txt"
+    log_file = "ko.txt"
     last_data = {}
 
     while True:
@@ -147,5 +147,7 @@ if __name__ == "__main__":
     t2 = threading.Thread ( target=fetch_tw_product, daemon=True)
     t1.start ( )
     t2.start ( )
-    while True:
-        time.sleep ( 1 ) 
+    time.sleep(9)  # 等待两线程跑 9 秒
+    print("运行 9 秒结束，退出程序")
+    #while True:
+        #time.sleep ( 1 ) 
